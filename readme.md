@@ -130,4 +130,5 @@
 ![idr_time](image/idr_time.png)
 
 - 所有楼层层间位移角分布图：类似于最大层间位移角分布图，每一时刻都可以绘制出层间位移角的分布图形，随时刻变化，可以得到层间位移角的动态时程，即可变的层间位移角时程图。横轴数据由`Idr.idr[][j]`获取，即对`Idr.idr`数组的每一个子数组取第`[j]`个元素表示在第`[j]`个时间点（即`j/frequency`时刻）所有楼层的层间位移角分布图。纵轴为建筑楼层高度，由结构体`struct Building.floor_height`提供（从第2项至末项），数组长度为`struct Building.floor_count - 1`。
+
 ![idr_of_j](image/idr_of_j.png)
