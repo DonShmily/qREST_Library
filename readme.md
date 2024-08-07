@@ -2,6 +2,8 @@
 
 ***Version1.0.20240807***
 
+[项目地址](https://github.com/DonShmily/qREST_Library)
+
 本次共封装出两个库文件：`edp_library`，用于计算工程需求参量（层间位移角）和`gmp_library`，用于计算地震动参数（反应谱、Fourier谱）。库使用`Cpp`编写，接口为`C`。生成动态库的编译器环境为MSVC 14.40。
 
 ## 文件目录
@@ -110,25 +112,25 @@
 
 - 反应谱图像：反应谱计算结果（包含拟反应谱）可以绘制给定加速度的反应谱图像。反应谱图像横轴为步长`struct ResponseSpectrum.dt`、长度`struct ResponseSpectrum.result_size`的数组。（这里默认为0.01*500），即横轴为0-5s的时间轴，表示反应谱的周期。反应谱图像纵轴为反应谱计算结果，数值由`struct ResponseSpectrum.Sa/Sv/Sd`提供。三种反应谱应绘制在不同图像中。反应谱绘制结果如下图：
   
-![Sa](image/Sa.png)
-![Sv](image/Sv.png)
-![Sd](image/Sd.png)
+  ![Sa](image/Sa.png)  
+  ![Sv](image/Sv.png)  
+  ![Sd](image/Sd.png)
 
 - Fourier谱图像：Fourier谱计算结果的图像。横轴为频率，刻度为输入加速度的采样频率`frequency`/加速度采样数`time_step_count`，长度一般取计算结果数组长度的一半。纵轴为Fourier谱计算结果，由函数返回的数组提供。Fourier谱绘制结果如下图：
   
-![Fourier](image/Fourier.png)
+  ![Fourier](image/Fourier.png)
 
 ### `edp_library`图形
 
 - 最大层间位移角分布图形：根据`GetMaxIdr`函数计算得到的最大层间位移角分布绘制的阶梯图。横轴为最大层间位移角结果，一维数组，由`GetMaxIdr`函数返回值结构体的成员变量`struct MaxIdr.max_idr`提供，数组长度由`GetMaxIdr`函数返回值结构体的成员变量`struct MaxIdr.story_count`提供。纵轴为建筑楼层高度，由结构体`struct Building.floor_height`提供（从第2项至末项），数组长度为`struct Building.floor_count - 1`。最大层间位移角图形如下：
   
-![max_idr](image/max_idr.png)
+  ![max_idr](image/max_idr.png)
   （阶梯图如不方便绘制，可先绘制折线图）
 
 - 单个楼层层间位移角时程图形：根据`ModifiedFilteringIntegral`或者`FilteringIntegral`可以计算得到所有层层间位移角的时程，结果以二维数组的形式打包在结构体`Idr`中，`Idr.idr[i]`可以获取第`i`层的层间位移角时程。由此所有楼层的层间位移角时程都是可以绘制的，绘制的形式类似于加速度的时程图。纵轴为`Idr.idr[i]`，表示第`[i]`层的层间位移角大小，数组长度为`Idr.time_step_count`。横轴为时间，间隔为采样频率的倒数`1/frequency`。结果如下：
   
-![idr_time](image/idr_time.png)
+  ![idr_time](image/idr_time.png)
 
 - 所有楼层层间位移角分布图：类似于最大层间位移角分布图，每一时刻都可以绘制出层间位移角的分布图形，随时刻变化，可以得到层间位移角的动态时程，即可变的层间位移角时程图。横轴数据由`Idr.idr[][j]`获取，即对`Idr.idr`数组的每一个子数组取第`[j]`个元素表示在第`[j]`个时间点（即`j/frequency`时刻）所有楼层的层间位移角分布图。纵轴为建筑楼层高度，由结构体`struct Building.floor_height`提供（从第2项至末项），数组长度为`struct Building.floor_count - 1`。
 
-![idr_of_j](image/idr_of_j.png)
+  ![idr_of_j](image/idr_of_j.png)
